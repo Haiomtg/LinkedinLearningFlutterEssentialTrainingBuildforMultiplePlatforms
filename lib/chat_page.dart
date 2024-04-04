@@ -3,7 +3,7 @@ import 'package:untitled1/widgets/chat_buble.dart';
 import 'package:untitled1/widgets/chat_input.dart';
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({Key? key}) : super(key: key);
+  ChatPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
