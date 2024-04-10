@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:untitled1/chat_page.dart';
+import 'package:untitled1/utils/spaces.dart';
+import 'package:untitled1/utils/textfield_styles.dart';
+import 'package:untitled1/widgets/login_text_field.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -13,8 +18,7 @@ class LoginPage extends StatelessWidget {
       print(userNameController.text);
       print(passwordController.text);
       
-      Navigator.push(context, MaterialPageRoute(
-          builder: (context) => ChatPage()));
+      Navigator.pushReplacementNamed(context, '/chat', arguments: '${userNameController.text}');
 
       print('Login successful!');
     } else {
@@ -23,6 +27,8 @@ class LoginPage extends StatelessWidget {
   }
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
+
+  final _mainUrl = "https://poojabhaumik.com";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,14 +69,15 @@ class LoginPage extends StatelessWidget {
                     fontSize: 20,
                     color: Colors.blueGrey,),
                 ),
-              Image.network('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/BLACKPINK_PUBG_Mobile_Sept_2020_ad_%28derived%29.jpg/220px-BLACKPINK_PUBG_Mobile_Sept_2020_ad_%28derived%29.jpg',
+              Image.asset('assets/blackpink.jpg',
               height: 200,
               ),
               Form(
                 key: _formkey,
                 child: Column(
                   children: [
-                    TextFormField(
+                    LoginTextField(
+                      hintText : "Enter your username",
                       validator: (value) {
                         if(value!=null && value.isNotEmpty && value.length < 5) {
                           return "Your username should be more than 5 characters";
@@ -80,27 +87,15 @@ class LoginPage extends StatelessWidget {
                         return null;
                       },
                       controller: userNameController,
-                      decoration: InputDecoration(
-                        hintText: 'Add your username',
-                        hintStyle: TextStyle(color: Colors.blueGrey),
-                        border: OutlineInputBorder(),
-                      ),
+
                     ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    TextFormField(
+                    verticalSpacing(24),
+                    LoginTextField(
+                      hasAsterisks: true,
                       controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'Add your password',
-                        hintStyle: TextStyle(color: Colors.blueGrey),
-                        border: OutlineInputBorder(),
-                      ),
+                      hintText: 'Enter your password',
                     ),
-                    SizedBox(
-                      height: 24,
-                    ),
+                    verticalSpacing(24),
                   ],
                 ),
               ),
@@ -113,10 +108,13 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),)
               ),
               // ignore: deprecated_member_use
-              InkWell(
-                onDoubleTap: () {
+              GestureDetector(
+                onTap: () async {
                   //todo: Navigate to browser
                   print('Link clicked');
+                  if(!await launch(_mainUrl)) {
+                    throw 'Could not launch this';
+                  }
                 },
                 onLongPress: () {
                   print('onLongPressed');

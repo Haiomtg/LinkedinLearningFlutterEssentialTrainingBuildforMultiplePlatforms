@@ -3,18 +3,20 @@ import 'package:untitled1/widgets/chat_buble.dart';
 import 'package:untitled1/widgets/chat_input.dart';
 
 class ChatPage extends StatelessWidget {
-  ChatPage({Key? key}) : super(key: key);
+  const ChatPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final username = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Hi Pooja!'),
+        title: Text('Hi $username!'),
         actions: [
           IconButton(
               onPressed: (){
+                Navigator.popAndPushNamed(context, '/');
                 print('Icon pressed');
             }, icon: Icon(Icons.logout))
         ],
